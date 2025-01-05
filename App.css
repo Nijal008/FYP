@@ -1,0 +1,414 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #f5f5f5;
+}
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #ece9e6, #ffffff);
+}
+
+.login-image img {
+  width: 400px;
+  height: auto;
+  border-radius: 10px;
+  
+}
+
+
+
+
+h2 {
+  margin: 0;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  color: #555;
+  text-align: center;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 10px;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-google:hover {
+  background-color: #a33e2c;
+}
+
+.forgot-password {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 14px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.form-links p {
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+}
+/* General Styling */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #f9f9f9;
+}
+
+.signup-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  
+}
+
+.signup-form {
+  width: 500px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 8px;
+
+  
+
+}
+
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.btn-green {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 10px;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-google:hover {
+  background-color: #a33e2c;
+}
+
+.divider {
+  text-align: center;
+  margin: 10px 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.form-footer {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.form-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.role-selection-container, .login-container, .signup-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.role-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.role-option {
+  flex: 1;
+  padding: 20px;
+  margin: 0 10px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.role-option:hover {
+  background-color: #e0e0e0;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button[type="button"] {
+  background-color: #4285f4;
+  margin-top: 10px;
+}
+
+button[type="button"]:hover {
+  background-color: #357ae8;
+}
+
+a {
+  color: #4285f4;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+.buttongroup{
+  display: flex;
+  justify-content: space-between;
+}
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: row;
+  background-color:white;
+ 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 800px;
+  height: 360px;
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-image img {
+  width: 300px; /* Adjust the width as needed */
+  height: auto;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button[type="button"] {
+  background-color: #4285f4;
+  margin-top: 10px;
+}
+
+button[type="button"]:hover {
+  background-color: #357ae8;
+}
+
+a {
+  color: #4285f4;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
