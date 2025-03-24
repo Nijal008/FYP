@@ -1,68 +1,121 @@
 import React, { useState } from 'react';
-import Image from './Image.png';
+import { useNavigate } from 'react-router-dom';
+import './styles/Login.css';
+import loginIllustration from './images/login-illustration.png';
 
-const Login = ({ setStep }) => {
+function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+    
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
+      if (!email || !password) {
+        setError('Please enter both email and password');
+        setIsLoading(false);
+        return;
+      }
+      
+      // Connect to the database for authentication
+      const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
-
+      
       const data = await response.json();
-
+      
       if (response.ok) {
-        alert('Login successful!');
-        // Redirect or handle post-login behavior
+        // Login successful
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('token', data.token);
+        
+        if (typeof onLogin === 'function') {
+          onLogin(data.user);
+        }
+        
+        navigate('/');
       } else {
-        setErrorMessage(data.message || 'Invalid credentials');
+        // Login failed
+        setError(data.message || 'Invalid email or password');
       }
-    } catch (error) {
-      setErrorMessage('Something went wrong. Please try again.');
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Connection error. Please make sure the server is running.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <div className="login-image">
-        <img src={Image} alt="Login Illustration" />
+      <div className="login-card">
+        <div className="login-illustration">
+          <img src={loginIllustration} alt="Login" />
+        </div>
+        <div className="login-form-container">
+
+          <h2 className="login-welcome">Welcome Back</h2>
+          
+          {error && <div className="error-message">{error}</div>}
+          
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            
+            <div className="forgot-password">
+              <a href="#" onClick={(e) => {e.preventDefault(); navigate('/forgot-password');}}>Forgot Password?</a>
+            </div>
+            
+            <button type="submit" className="login-button" disabled={isLoading}>
+              {isLoading ? 'Logging in...' : 'Login'}
+            </button>
+            
+            <div className="login-divider">
+              <span>OR</span>
+            </div>
+            
+            <button 
+              type="button" 
+              className="create-account-button"
+              onClick={() => navigate('/signup')}
+            >
+              Create an Account
+            </button>
+          </form>
+        </div>
       </div>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-        {errorMessage && <p className="error">{errorMessage}</p>}
-        <div className="form-group">
-          <label>Email or Username</label>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Continue</button>
-        <a href="#">Forgot Password?</a>
-        <button type="button" onClick={() => setStep('signup')}>Sign Up</button>
-      </form>
     </div>
   );
-};
+}
 
 export default Login;

@@ -412,3 +412,286 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  background-color: #e9ecef;
+}
+
+.search-container {
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  width: 80%;
+  justify-content: center;
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  padding: 10px;
+  width: 80%;
+  height: 30px;
+}
+
+.features, .services, .how-it-works {
+  width: 80%;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.feature-icons {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.feature {
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  flex: 1;
+  margin: 0 10px;
+}
+
+.emergency {
+  background-color: #dc3545; /* Red for emergency */
+}
+
+.service-list {
+  display: flex;
+  justify-content: space-around;
+}
+
+.service-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cta {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.cta button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.cta button:hover {
+  background-color: #218838;
+}
+
+.contact-us-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-us-container h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+.nav {
+  display: flex; /* Use flexbox for horizontal layout */
+  justify-content: space-between; /* Space out the items */
+  align-items: center; /* Center items vertically */
+  list-style: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.nav ul {
+  display: flex; /* Make the list items display in a row */
+  gap: 20px; /* Add space between the items */
+}
+
+.nav li {
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-size: 20px; /* Adjust font size */
+}
+
+.service-listings {
+  text-align: center;
+  padding: 20px;
+}
+
+.service-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.service-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 10px;
+  width: 200px; /* Adjust width as needed */
+  text-align: center;
+  transition: box-shadow 0.3s;
+}
+
+.service-card img {
+  width: 100%; /* Make image responsive */
+  height: auto;
+  border-radius: 5px;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.booking-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+.service-provider-list {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.provider-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.provider-card {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  width: 200px; /* Adjust width as needed */
+  text-align: center;
+  transition: box-shadow 0.3s;
+}
+
+.provider-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
