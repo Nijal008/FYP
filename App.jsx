@@ -33,16 +33,30 @@ function App() {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setUserRole(parsedUser.role);
+      } catch (error) {
+        console.error('Error parsing stored user:', error);
+        localStorage.removeItem('user');
+      }
     }
   }, []);
+
+  // Handle login
+  const handleLogin = (userData) => {
+    setUser(userData);
+    setUserRole(userData.role);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
 
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     setUser(null);
+    setUserRole(null);
     return <Navigate to="/" />;
   };
 
@@ -63,7 +77,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Homepage setUserRole={setUserRole} user={user} onLogout={handleLogout} />} />
-        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/role-selection" element={<RoleSelection setUserRole={setUserRole} />} />
         <Route path="/signup" element={<Signup userRole={userRole} />} />
         <Route path="/contact" element={<ContactUs />} />

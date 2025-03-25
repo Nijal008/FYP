@@ -1,0 +1,28 @@
+.role-selection-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.role-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.role-option {
+  flex: 1;
+  padding: 20px;
+  margin: 0 10px;
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.role-option:hover {
+  background-color: #e0e0e0;
+}
