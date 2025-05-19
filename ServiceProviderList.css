@@ -516,3 +516,27 @@
     width: 100%;
   }
 }
+
+/* Add these styles to your existing CSS file */
+
+.provider-service {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.service-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.service-name {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.provider-bio {
+  margin: 10px 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+}
