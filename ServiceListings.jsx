@@ -23,8 +23,13 @@ const ServiceListings = () => {
 
   // Function to handle service selection
   const handleServiceSelect = (serviceId, serviceName) => {
-    // Navigate to booking page with service ID and name
-    navigate(`/service/${serviceId}`, { state: { serviceName } });
+    // Navigate to service provider list with serviceId as a query parameter
+    navigate(`/service-providers?serviceId=${serviceId}`, { 
+      state: { 
+        serviceId, 
+        serviceName 
+      } 
+    });
   };
 
   return (

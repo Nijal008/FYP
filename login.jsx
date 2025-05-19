@@ -42,7 +42,12 @@ function Login({ onLogin }) {
           onLogin(data.user);
         }
         
-        navigate('/');
+        // Redirect based on user role
+        if (data.user.role === 'provider') {
+          navigate('/provider-dashboard');
+        } else {
+          navigate('/profile');
+        }
       } else {
         // Login failed
         setError(data.message || 'Invalid email or password');
@@ -53,6 +58,11 @@ function Login({ onLogin }) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCreateAccount = () => {
+    // Redirect to the role selection page first instead of directly to provider signup
+    navigate('/role-selection');
   };
 
   return (
@@ -104,10 +114,10 @@ function Login({ onLogin }) {
               <span>OR</span>
             </div>
             
+            
             <button 
-              type="button" 
-              className="create-account-button"
-              onClick={() => navigate('/signup')}
+              className="create-account-btn" 
+              onClick={handleCreateAccount}
             >
               Create an Account
             </button>

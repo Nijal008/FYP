@@ -17,7 +17,7 @@ const RoleSelection = ({ setUserRole }) => {
     <div className="role-selection-container">
       <div className="role-selection-card">
         <div className="role-selection-header">
-          <h2>Join HIreLy as a...</h2>
+          <h2>Join Hirely as a...</h2>
           <p>Choose how you want to use our platform</p>
         </div>
         
