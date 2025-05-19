@@ -1,0 +1,241 @@
+.admin-users, .admin-jobs, .admin-applications, .admin-dashboard, .admin-settings {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.users-content, .jobs-content, .applications-content, .dashboard-content, .settings-content {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .users-content, .jobs-content, .applications-content, .dashboard-content, .settings-content {
+    margin-left: 250px;
+    padding: 25px 30px;
+  }
+}
+
+/* Add responsive width adjustments */
+@media (min-width: 1400px) {
+  .users-content, .jobs-content, .applications-content, .dashboard-content, .settings-content {
+    max-width: 90%;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .stat-card {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .users-content, .jobs-content, .applications-content, .dashboard-content, .settings-content {
+    margin-left: 0;
+    padding: 15px;
+    padding-top: 60px;
+  }
+  
+  .data-table {
+    font-size: 14px;
+    overflow-x: auto;
+    display: block;
+  }
+  
+  .data-table th, .data-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Table improvements */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  display: block;
+  padding: 20 auto;
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.data-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.data-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Improve table pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button:hover {
+  background-color: #f8f9fa;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Ensure table container has proper height */
+.table-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.data-table th, .data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+}
+
+.data-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Make job and application containers scrollable */
+.jobs-content, .applications-content {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-bottom: 50px;
+}
+
+.job-details-container, .application-details-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Scrollbar styling for better visibility */
+.data-table::-webkit-scrollbar,
+.jobs-content::-webkit-scrollbar,
+.applications-content::-webkit-scrollbar,
+.job-details-container::-webkit-scrollbar,
+.application-details-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.data-table::-webkit-scrollbar-track,
+.jobs-content::-webkit-scrollbar-track,
+.applications-content::-webkit-scrollbar-track,
+.job-details-container::-webkit-scrollbar-track,
+.application-details-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.data-table::-webkit-scrollbar-thumb,
+.jobs-content::-webkit-scrollbar-thumb,
+.applications-content::-webkit-scrollbar-thumb,
+.job-details-container::-webkit-scrollbar-thumb,
+.application-details-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.data-table::-webkit-scrollbar-thumb:hover,
+.jobs-content::-webkit-scrollbar-thumb:hover,
+.applications-content::-webkit-scrollbar-thumb:hover,
+.job-details-container::-webkit-scrollbar-thumb:hover,
+.application-details-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Add these styles for the toggle arrow functionality */
+.details-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.toggle-arrow {
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  transform: translateY(-50%);
+  background-color: #007bff;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.toggle-arrow:hover {
+  background-color: #0056b3;
+}
+
+.details-section {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.details-section.collapsed {
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.details-section.expanded {
+  max-height: 1000px;
+  opacity: 1;
+  visibility: visible;
+}
+
+.section-divider {
+  border-top: 1px solid #e0e0e0;
+  margin: 20px 0;
+}

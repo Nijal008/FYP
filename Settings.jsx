@@ -1,413 +1,249 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Settings.css';
+import axios from 'axios';
+import './Settings.css';
+import Sidebar from './Sidebar';
 
-const Settings = ({ user, onLogout }) => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('account');
-  const [accountSettings, setAccountSettings] = useState({
-    email: '',
-    notifications: {
-      email: true,
-      sms: false,
-      app: true
-    },
-    language: 'english'
-  });
-  const [securitySettings, setSecuritySettings] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-  const [message, setMessage] = useState({ text: '', type: '' });
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
-    // Set initial account settings from user data
-    setAccountSettings(prev => ({
-      ...prev,
-      email: user.email || ''
-    }));
-
-    // Fetch additional user settings if needed
-    fetchUserSettings();
-  }, [user, navigate]);
-
-  const fetchUserSettings = async () => {
-    if (!user || !user.id) return;
-    
-    try {
-      const response = await fetch(`http://localhost:3000/api/users/${user.id}/settings`);
-      
-      // If endpoint doesn't exist yet, just use current user data
-      if (!response.ok) {
-        console.log('Settings endpoint not implemented yet, using current user data');
-        return;
-      }
-      
-      const data = await response.json();
-      setAccountSettings(prev => ({
-        ...prev,
-        ...data,
-        email: data.email || user.email || ''
-      }));
-    } catch (error) {
-      console.error('Error fetching user settings:', error);
-    }
-  };
-
-  const handleAccountChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    
-    if (type === 'checkbox') {
-      setAccountSettings(prev => ({
-        ...prev,
-        notifications: {
-          ...prev.notifications,
-          [name]: checked
-        }
-      }));
-    } else {
-      setAccountSettings(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-
-  const handleSecurityChange = (e) => {
-    const { name, value } = e.target;
-    setSecuritySettings(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleAccountSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setMessage({ text: '', type: '' });
-    
-    try {
-      if (!user || !user.id) {
-        throw new Error('User ID not found. Please log in again.');
-      }
-
-      // Format data for the API
-      const formattedData = {
-        email: accountSettings.email,
-        // You can add additional fields here if the backend supports them
-        notifications: accountSettings.notifications,
-        language: accountSettings.language
-      };
-
-      // Send the settings data to the backend
-      const response = await fetch(`http://localhost:3000/api/users/${user.id}/settings`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formattedData)
-      });
-
-      if (!response.ok) {
-        // If the endpoint doesn't exist yet, try updating just the email
-        if (response.status === 404) {
-          const emailUpdateResponse = await fetch(`http://localhost:3000/api/users/${user.id}/profile`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: accountSettings.email })
-          });
-          
-          if (!emailUpdateResponse.ok) {
-            const errorData = await emailUpdateResponse.json();
-            throw new Error(errorData.message || 'Failed to update email');
-          }
-          
-          setMessage({ text: 'Email updated successfully!', type: 'success' });
-          setIsLoading(false);
-          return;
-        }
-        
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update account settings');
-      }
-
-      const data = await response.json();
-      setMessage({ text: 'Account settings updated successfully!', type: 'success' });
-      
-      // Clear message after 3 seconds
-      setTimeout(() => {
-        setMessage({ text: '', type: '' });
-      }, 3000);
-    } catch (error) {
-      console.error('Error updating account settings:', error);
-      setMessage({ text: error.message || 'Error updating account settings', type: 'error' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSecuritySubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setMessage({ text: '', type: '' });
-    
-    // Validate passwords
-    if (securitySettings.newPassword !== securitySettings.confirmPassword) {
-      setMessage({ text: 'New passwords do not match!', type: 'error' });
-      setIsLoading(false);
-      return;
-    }
-    
-    if (securitySettings.newPassword.length < 8) {
-      setMessage({ text: 'Password must be at least 8 characters long!', type: 'error' });
-      setIsLoading(false);
-      return;
-    }
-    
-    try {
-      // Make sure we have the user's email
-      const email = accountSettings.email || user?.email;
-      if (!email) {
-        throw new Error('User email not found. Please refresh the page and try again.');
-      }
-
-      console.log('Submitting password change for:', email);
-      
-      // Call the API to update password
-      const response = await fetch('http://localhost:3000/password/change', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          currentPassword: securitySettings.currentPassword,
-          newPassword: securitySettings.newPassword
-        })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to change password');
-      }
-      
-      setMessage({ text: data.message || 'Password updated successfully!', type: 'success' });
-      
-      // Clear form
-      setSecuritySettings({
+function Settings() {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [adminProfile, setAdminProfile] = useState({
+        name: '',
+        email: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
-      });
-    } catch (error) {
-      console.error('Error changing password:', error);
-      setMessage({ 
-        text: error.message || 'Error changing password', 
-        type: 'error' 
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
+    const [siteSettings, setSiteSettings] = useState({
+        siteName: 'HamroJob',
+        siteDescription: 'Find your dream job in Nepal',
+        contactEmail: 'contact@hamrojob.com',
+        phoneNumber: '+977 1234567890',
+        address: 'Kathmandu, Nepal'
+    });
 
-  return (
-    <div className="settings-container">
-      <header className="header">
-        <div className="logo">
-          <h1 onClick={() => navigate('/')}>Hirely</h1>
-        </div>
-        <nav className="nav">
-          <ul>
-            <li onClick={() => navigate('/')}>Home</li>
-            <li onClick={() => navigate('/services')}>Services</li>
-            <li onClick={() => navigate('/dashboard')}>Dashboard</li>
-          </ul>
-        </nav>
-      </header>
+    useEffect(() => {
+        // Check if admin is logged in
+        const adminUser = localStorage.getItem('adminUser');
+        if (!adminUser) {
+            navigate('/admin/login');
+            return;
+        }
 
-      <div className="settings-content">
-        <div className="profile-sidebar">
-          <div className="sidebar-menu">
-            <div className="menu-item" onClick={() => navigate('/profile')}>
-              <i className="fas fa-user"></i>
-              <span>My Profile</span>
-            </div>
-            <div className="menu-item" onClick={() => navigate('/bookings')}>
-              <i className="fas fa-calendar-check"></i>
-              <span>My Bookings</span>
-            </div>
-            <div className="menu-item" onClick={() => navigate('/payments')}>
-              <i className="fas fa-credit-card"></i>
-              <span>Payment Methods</span>
-            </div>
-            <div className="menu-item active">
-              <i className="fas fa-cog"></i>
-              <span>Account Settings</span>
-            </div>
-            <div className="menu-item logout" onClick={onLogout}>
-              <i className="fas fa-sign-out-alt"></i>
-              <span>Log Out</span>
-            </div>
-          </div>
-        </div>
+        // Load admin profile
+        const admin = JSON.parse(adminUser);
+        setAdminProfile(prevState => ({
+            ...prevState,
+            name: admin.name || '',
+            email: admin.email || ''
+        }));
 
-        <div className="settings-main">
-          <div className="settings-header">
-            <h2>Account Settings</h2>
-          </div>
+        // In a real app, you would fetch site settings from your API
+    }, [navigate]);
 
-          {message.text && (
-            <div className={`message ${message.type}`}>
-              {message.text}
-            </div>
-          )}
+    const handleProfileChange = (e) => {
+        const { name, value } = e.target;
+        setAdminProfile(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
-          <div className="settings-tabs">
-            <div 
-              className={`tab ${activeTab === 'account' ? 'active' : ''}`}
-              onClick={() => setActiveTab('account')}
-            >
-              Account Preferences
-            </div>
-            <div 
-              className={`tab ${activeTab === 'security' ? 'active' : ''}`}
-              onClick={() => setActiveTab('security')}
-            >
-              Security
-            </div>
-          </div>
+    const handleSiteSettingsChange = (e) => {
+        const { name, value } = e.target;
+        setSiteSettings(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
 
-          <div className="settings-forms">
-            {activeTab === 'account' && (
-              <form onSubmit={handleAccountSubmit} className="account-form">
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input 
-                    type="email" 
-                    name="email" 
-                    value={accountSettings.email}
-                    onChange={handleAccountChange}
-                    disabled
-                  />
-                  <small>To change your email, please contact support.</small>
+    const updateProfile = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setMessage(null);
+
+        // Validate passwords
+        if (adminProfile.newPassword && adminProfile.newPassword !== adminProfile.confirmPassword) {
+            setMessage({ type: 'error', text: 'New passwords do not match' });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            // In a real app, you would send this data to your API
+            // For now, we'll just simulate a successful update
+            setTimeout(() => {
+                setMessage({ type: 'success', text: 'Profile updated successfully' });
+                setLoading(false);
+                
+                // Clear password fields
+                setAdminProfile(prevState => ({
+                    ...prevState,
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                }));
+            }, 1000);
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            setMessage({ type: 'error', text: 'Failed to update profile' });
+            setLoading(false);
+        }
+    };
+
+    const updateSiteSettings = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setMessage(null);
+
+        try {
+            // In a real app, you would send this data to your API
+            // For now, we'll just simulate a successful update
+            setTimeout(() => {
+                setMessage({ type: 'success', text: 'Site settings updated successfully' });
+                setLoading(false);
+            }, 1000);
+        } catch (error) {
+            console.error('Error updating site settings:', error);
+            setMessage({ type: 'error', text: 'Failed to update site settings' });
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="admin-settings">
+            <Sidebar />
+            
+            <div className="settings-content">
+                <div className="settings-header">
+                    <h1>Settings</h1>
                 </div>
 
-                <div className="form-group">
-                  <label>Language</label>
-                  <select 
-                    name="language" 
-                    value={accountSettings.language}
-                    onChange={handleAccountChange}
-                  >
-                    <option value="english">English</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
-                    <option value="german">German</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Notifications</label>
-                  <div className="checkbox-group">
-                    <div className="checkbox-item">
-                      <input 
-                        type="checkbox" 
-                        id="email-notifications" 
-                        name="email" 
-                        checked={accountSettings.notifications.email}
-                        onChange={handleAccountChange}
-                      />
-                      <label htmlFor="email-notifications">Email Notifications</label>
+                {message && (
+                    <div className={`message ${message.type}`}>
+                        {message.text}
                     </div>
-                    <div className="checkbox-item">
-                      <input 
-                        type="checkbox" 
-                        id="sms-notifications" 
-                        name="sms" 
-                        checked={accountSettings.notifications.sms}
-                        onChange={handleAccountChange}
-                      />
-                      <label htmlFor="sms-notifications">SMS Notifications</label>
+                )}
+
+                <div className="settings-sections">
+                    <div className="settings-section">
+                        <h2>Admin Profile</h2>
+                        <form onSubmit={updateProfile}>
+                            <div className="form-group">
+                                <label>Name</label>
+                                <input 
+                                    type="text" 
+                                    name="name" 
+                                    value={adminProfile.name} 
+                                    onChange={handleProfileChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input 
+                                    type="email" 
+                                    name="email" 
+                                    value={adminProfile.email} 
+                                    onChange={handleProfileChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Current Password</label>
+                                <input 
+                                    type="password" 
+                                    name="currentPassword" 
+                                    value={adminProfile.currentPassword} 
+                                    onChange={handleProfileChange} 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>New Password</label>
+                                <input 
+                                    type="password" 
+                                    name="newPassword" 
+                                    value={adminProfile.newPassword} 
+                                    onChange={handleProfileChange} 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Confirm New Password</label>
+                                <input 
+                                    type="password" 
+                                    name="confirmPassword" 
+                                    value={adminProfile.confirmPassword} 
+                                    onChange={handleProfileChange} 
+                                />
+                            </div>
+                            <button type="submit" disabled={loading}>
+                                {loading ? "Updating..." : "Update Profile"}
+                            </button>
+                        </form>
                     </div>
-                    <div className="checkbox-item">
-                      <input 
-                        type="checkbox" 
-                        id="app-notifications" 
-                        name="app" 
-                        checked={accountSettings.notifications.app}
-                        onChange={handleAccountChange}
-                      />
-                      <label htmlFor="app-notifications">App Notifications</label>
+
+                    <div className="settings-section">
+                        <h2>Site Settings</h2>
+                        <form onSubmit={updateSiteSettings}>
+                            <div className="form-group">
+                                <label>Site Name</label>
+                                <input 
+                                    type="text" 
+                                    name="siteName" 
+                                    value={siteSettings.siteName} 
+                                    onChange={handleSiteSettingsChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Site Description</label>
+                                <textarea 
+                                    name="siteDescription" 
+                                    value={siteSettings.siteDescription} 
+                                    onChange={handleSiteSettingsChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Contact Email</label>
+                                <input 
+                                    type="email" 
+                                    name="contactEmail" 
+                                    value={siteSettings.contactEmail} 
+                                    onChange={handleSiteSettingsChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Phone Number</label>
+                                <input 
+                                    type="text" 
+                                    name="phoneNumber" 
+                                    value={siteSettings.phoneNumber} 
+                                    onChange={handleSiteSettingsChange} 
+                                    required 
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Address</label>
+                                <input 
+                                    type="text" 
+                                    name="address" 
+                                    value={siteSettings.address} 
+                                    onChange={handleSiteSettingsChange} 
+                                    required 
+                                />
+                            </div>
+                            <button type="submit" disabled={loading}>
+                                {loading ? "Updating..." : "Update Settings"}
+                            </button>
+                        </form>
                     </div>
-                  </div>
                 </div>
-
-                <div className="form-actions">
-                  <button type="submit" className="save-button" disabled={isLoading}>
-                    {isLoading ? 'Saving...' : 'Save Changes'}
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {activeTab === 'security' && (
-              <form onSubmit={handleSecuritySubmit} className="security-form">
-                <div className="form-group">
-                  <label>Current Password</label>
-                  <input 
-                    type="password" 
-                    name="currentPassword" 
-                    value={securitySettings.currentPassword}
-                    onChange={handleSecurityChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>New Password</label>
-                  <input 
-                    type="password" 
-                    name="newPassword" 
-                    value={securitySettings.newPassword}
-                    onChange={handleSecurityChange}
-                    required
-                  />
-                  <small>Password must be at least 8 characters long</small>
-                </div>
-
-                <div className="form-group">
-                  <label>Confirm New Password</label>
-                  <input 
-                    type="password" 
-                    name="confirmPassword" 
-                    value={securitySettings.confirmPassword}
-                    onChange={handleSecurityChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-actions">
-                  <button type="submit" className="save-button" disabled={isLoading}>
-                    {isLoading ? 'Updating...' : 'Update Password'}
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
 
 export default Settings;

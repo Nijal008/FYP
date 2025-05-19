@@ -1,0 +1,132 @@
+.admin-sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #ffffff;
+    color: #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #ffffff;
+}
+
+.sidebar-logo {
+    width: 80px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+    overflow-y: auto;
+    width: fit-content;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+    
+
+}
+
+.sidebar-nav li {
+    margin-bottom: 5px;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #666;
+    background-color: transparent;
+    text-decoration: none;
+    transition: all 0.3s;
+    border-radius: 4px;
+    margin: 0 8px;
+}
+
+.sidebar-nav li a:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.sidebar-nav li.active a {
+    background-color: #007bff;
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
+}
+
+.sidebar-nav li ion-icon {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.sidebar-nav li span {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.sidebar-footer {
+    padding: 15px;
+    text-align: center;
+    font-size: 12px;
+    color: #adb5bd;
+    border-top: 1px solid #495057;
+    background-color: #1e2b38;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-toggle-btn {
+        display: block;
+    }
+}
+
+/* Scrollbar styling */
+.sidebar-nav::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: #1e2b38;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: #495057;
+    border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: #007bff;
+}
